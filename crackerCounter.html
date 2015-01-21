@@ -1,0 +1,60 @@
+<head>
+  <title>crackerCounter</title>
+
+<script src="client/1self.js" type="javascript"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0"/>
+</head>
+
+<body>
+<div class="heading">crackerCounter</div>
+<div class="container fullHeight">
+    <div class="logActivityTemplate fullHeight">
+        {{> logging}}
+    </div>
+    <div class="showVizTemplate fullHeight" style="display: none;">
+        {{> selectVisualizations}}
+    </div>
+</div>
+</body>
+
+<template name="logging">
+    <div class="row spacer">
+        <div class="col-xs-8 col-sm-8 col-lg-8">
+            <div id="cookie" class="activityLabel">Cookie (num)</div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-lg-4">
+            <div class="logvalue">
+                <input type="number" name="cookie"/>
+            </div>
+        </div>
+    </div>
+    <div class="logsection">
+        <button id="logActivity" class="btn-default log">Log</button>
+    </div>
+    {{> footer}}
+</template>
+
+<template name="selectVisualizations">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-lg-12">
+            <div id="cookieViz" class="graphButton">Cookie (num)</div>
+        </div>
+    </div>
+    {{> footer}}
+</template>
+
+<template name="footer">
+    <div class="footer">
+        <div class="row footer-element-container">
+            <div id="displayLogActivityTemplate" class="nav-links col-xs-2 col-sm-2 col-lg-2">
+                <div class="nav-icon glyphicon glyphicon-th-list"></div>
+            </div>
+            <div id="displaySelectVizTemplate" class="nav-links col-xs-2 col-sm-2 col-lg-2">
+                <div class="nav-icon glyphicon glyphicon-signal"></div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
