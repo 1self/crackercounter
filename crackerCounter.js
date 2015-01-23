@@ -46,7 +46,7 @@ if (Meteor.isClient) {
             var cookieEvent = {
                 "source": config.appName,
                 "version": config.appVersion,
-                "objectTags": ["num", "cookie"],
+                "objectTags": ["food", "biscuit", "cookie"],
                 "actionTags": ["eat"],
                  "properties": {
                     "num": parseInt(cookieInput.val())
@@ -76,9 +76,9 @@ if (Meteor.isClient) {
         'click #cookieViz': function () {
           console.log("in cookie viz")
             var url = lib1self.visualize(window.localStorage.streamId, window.localStorage.readToken)
-                .objectTags(["num", "cookie"])
+                .objectTags(["food", "biscuit", "cookie"])
                 .actionTags(["eat"])
-                .sum("num")
+                .sum("num") 
                 .barChart()
                 .backgroundColor("84c341")
                 .url();
