@@ -220,32 +220,28 @@
         req.onload = function () {
             if (req.readyState == 4 && req.status == 200) {
                 var response = JSON.parse(req.response);
-                callback(response);
+                callback(null, response);
 
             } else {
                 //console.log(new Error(req.statusText));
-                callback(null);
+                callback(new Error(req.statusText));
             }
         };
         req.onerror = function () {
             //console.log(Error("Network Error"));
-            callback(null);
+            callback(Error("Network Error"));
         };
         req.send();
         return this;
     };
 
-    Lib1self.prototype.sendEvent = function (event, streamid, writeToken, callback) {
+    Lib1self.prototype.sendEvent = function (event, streamid, writeToken) {
         if (!writeToken || !streamid) {
-            console.log(new Error("streamid, writeToken needs to be specified"));
-            callback(false);
-            return this;
+            throw (new Error("streamid, writeToken needs to be specified"));
         }
 
         if (typeof event !== 'object' || typeof event.length === 'number') {
-            console.log(new Error("Event type error"));
-            callback(false);
-            return this;
+            throw (new Error("Event type error"));
         }
 
         config.streamid = streamid;
@@ -255,26 +251,17 @@
         queueEvent(event);
 
         sendEventQueue(this.onsendsuccess, this.onsenderror);
-        callback(true);
         return this;
     };
 
-    Lib1self.prototype.backgroundColor = function (backgroundColor) {
-        this.BACKGROUND_COLOR = backgroundColor;
-        return this;
-    };
 
-    Lib1self.prototype.sendEvents = function (events, streamid, writeToken, callback) {
+    Lib1self.prototype.sendEvents = function (events, streamid, writeToken) {
         if (!writeToken) {
-            console.log(new Error("streamid, writeToken needs to be specified"));
-            callback(false);
-            return this;
+            throw (new Error("streamid, writeToken needs to be specified"));
         }
 
         if (typeof events !== 'object' || typeof events.length === 'undefined') {
-            console.log(new Error("Event type error"));
-            callback(false);
-            return this;
+            throw (new Error("Event type error"));
         }
 
         events.forEach(function (event) {
@@ -286,7 +273,11 @@
         config.writeToken = writeToken;
         saveJSON('config', config);
         sendEventQueue(this.onsendsuccess, this.onsenderror);
-        callback(true);
+        return this;
+    };
+
+    Lib1self.prototype.backgroundColor = function (backgroundColor) {
+        this.BACKGROUND_COLOR = backgroundColor;
         return this;
     };
 
@@ -359,10 +350,12 @@
         var object_tags_str = stringifyTags(this.OBJECT_TAGS);
         var action_tags_str = stringifyTags(this.ACTION_TAGS);
 
-        var url = API_ENDPOINT + "/v1/streams/" + config.streamid + "/events/" + object_tags_str + "/" + action_tags_str + "/" + this.FUNCTION_TYPE + "/daily/" + this.CHART_TYPE;
+        var url = API_ENDPOINT + "/v1/streams/" + config.streamid + "/events/" + object_tags_str + "/" +
+            action_tags_str + "/" + this.FUNCTION_TYPE + "/daily/" + this.CHART_TYPE +
+            "?readToken="+config.readToken;
 
         if ((this.BACKGROUND_COLOR !== undefined) || (this.BACKGROUND_COLOR !== "")) {
-            url = url + "?bgColor=" + this.BACKGROUND_COLOR;
+            url = url + "&bgColor=" + this.BACKGROUND_COLOR;
         }
 
         return url;

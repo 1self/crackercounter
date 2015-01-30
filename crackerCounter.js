@@ -33,7 +33,7 @@ if (Meteor.isClient) {
 
         if (!isStreamRegistered()) {
             console.info("registering stream.");
-            lib1self.registerStream(function (stream) {
+            lib1self.registerStream(function (err, stream) {
                 storeStreamDetails(stream);
             });
         }
